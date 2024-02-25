@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/image_icon"
+        android:icon="@drawable/image"
+        android:title="Image" />
+    <item
+        android:id="@+id/album_icon"
+        android:icon="@drawable/album"
+        android:title="Album" />
+
+    <item
+        android:id="@+id/image_search_icon"
+        android:icon="@drawable/video"
+        android:title="Video" />
+    <item
+        android:id="@+id/search_icon"
+        android:icon="@drawable/video"
+        android:title="Search" />
+</menu>
