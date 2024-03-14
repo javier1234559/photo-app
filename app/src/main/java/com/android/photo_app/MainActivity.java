@@ -22,10 +22,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.photo_app.image.Image;
 import com.android.photo_app.image.ImageAdapter;
+import com.android.photo_app.image.ImageFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,49 +40,23 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
 
-    private List<Image> imageList;
-    private ImageAdapter imageAdapter;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SplashScreen.installSplashScreen(this);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-
-        imageList = getAllImages();
-        imageAdapter = new ImageAdapter(imageList);
-
-        recyclerView.setAdapter(imageAdapter);
+        replaceFragment(new ImageFragment());
 
     }
 
-    private List<Image> getAllImages() {
-        List<Image> images = new ArrayList<>();
-
-        // Use MediaStore to retrieve image file paths
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                projection, null, null, null);
-
-        if (cursor != null) {
-            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-            while (cursor.moveToNext()) {
-                String imagePath = cursor.getString(columnIndex);
-                Log.e(TAG,""+ imagePath);
-                images.add(new Image(imagePath));
-            }
-
-            cursor.close();
-        }
-
-        return images;
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setReorderingAllowed(true);
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
-
 
     @Override
     protected void onStart() {
